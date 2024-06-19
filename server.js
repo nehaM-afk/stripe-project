@@ -22,24 +22,24 @@ app.use(express.json());
 
 // Serve the config endpoint
 app.get('/config', (req, res) => {
-  res.json({ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY });
+    res.json({ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY });
 });
 
 // Create a payment intent
 app.post('/create-payment-intent', async (req, res) => {
-  const { paymentMethodType, currency } = req.body;
+    const { paymentMethodType, currency } = req.body;
 
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: 1999,
-      currency,
-      payment_method_types: [paymentMethodType],
-    });
+    try {
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: 1999,
+            currency,
+            payment_method_types: [paymentMethodType],
+        });
 
-    res.json({ clientSecret: paymentIntent.client_secret });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
+        res.json({ clientSecret: paymentIntent.client_secret });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
 const PORT = process.env.PORT || 3000;
